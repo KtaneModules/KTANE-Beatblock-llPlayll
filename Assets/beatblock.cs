@@ -7,10 +7,17 @@ using UnityEngine;
 using KModkit;
 using Rnd = UnityEngine.Random;
 
-public class template : MonoBehaviour
+public class beatblock : MonoBehaviour
 {
     [SerializeField] private KMBombInfo Bomb;
     [SerializeField] private KMAudio Audio;
+
+    [SerializeField] KMSelectable MenuRight;
+    [SerializeField] SpriteRenderer MenuRightSprite;
+    [SerializeField] Sprite[] MenuRights;
+    [SerializeField] KMSelectable Background;
+    [SerializeField] SpriteRenderer BackgroundSprite;
+    [SerializeField] Sprite[] Backgrounds;
 
     static int ModuleIdCounter = 1;
     int ModuleId;
@@ -19,13 +26,9 @@ public class template : MonoBehaviour
     void Awake()
     {
         ModuleId = ModuleIdCounter++;
-        /*
-        foreach (KMSelectable object in keypad) {
-            object.OnInteract += delegate () { keypadPress(object); return false; };
-            }
-        */
-
         //button.OnInteract += delegate () { buttonPress(); return false; };
+        MenuRight.OnHighlight += delegate () { MenuRightSprite.sprite = MenuRights[1]; };
+        MenuRight.OnHighlightEnded += delegate () { MenuRightSprite.sprite = MenuRights[0]; };
     }
 
     void Start()
@@ -35,7 +38,7 @@ public class template : MonoBehaviour
 
     void Log(string arg)
     {
-        Debug.Log($"[Template #{ModuleId}] {arg}");
+        Debug.Log($"[Beatblock #{ModuleId}] {arg}");
     }
 
 #pragma warning disable 414
