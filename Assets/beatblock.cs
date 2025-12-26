@@ -12,7 +12,7 @@ public class beatblock : MonoBehaviour
     [SerializeField] private KMBombInfo Bomb;
     [SerializeField] private KMAudio Audio;
 
-    string[,] Charts = new string[100, 3]
+    string[,] Charts = new string[155, 3]
     {
         { "La Di Da (Nightcore &\nCut Ver.)", "Baracuda", "Piger" },
         { "Cold Green Eyes", "Station Earth (ft. Roos Denayer)", "_Play_" },
@@ -42,7 +42,7 @@ public class beatblock : MonoBehaviour
         { "Lustre", "Camellia", "lalafk" },
         { "Pyromania", "ime44", "Bean" },
         { "BIG SHOT", "Toby Fox", "Flecha Da Foxy" },
-        { "Seimeisei Syndrome", "Camellia", "himych" },
+        { "Seimeisei Syndrome", "かめりあ", "himych" },
         { "Space Invaders", "Teminite & MDK", "Piger vs. himych" },
         { "BIKE", "tanger", "Flecha Da Foxy" },
         { "Otonoke", "Creepy Nuts", "Cytruss" },
@@ -92,6 +92,12 @@ public class beatblock : MonoBehaviour
         { "You are the Miserable", "t+pazolite", "rand06, Piger" },
         { "Galaxy Collapse", "Kurokotei", "CIS Community" },
         { "The Empress", "UNDEAD CORPORATION", "Ratøri, Piger" },
+        { "Someone Special", "tomatoism", "himych" },
+        { "ONIGIRI FREEWAY", "OISHII", "pois" },
+        { "Ravers Fantasy", "Tune Up", "Piger + BetaFail" },
+        { "Flower Dance", "DJ OKAWARI", "lotus" },
+        { "BPM=RT", "t+pazolite", "Random22" },
+        { "PUSH UR T3MPRR", "femtanyl", "lalafk" },
         { "1,2,3,4!", "Cansol", "Cytruss" },
         { "A Rhythm Gamer's\nWorst Nightmare", "Return2Nothing", "Random22" },
         { "Ävril -Flicka i krans-", "Rigël Theatre", "Bekko" },
@@ -113,7 +119,56 @@ public class beatblock : MonoBehaviour
         { "MAYDAY feat. Laura\nBrehm (Cut Ver.)", "TheFatRat", "Piger" },
         { "On Little Cat Feet", "Nightmargin", "Piger" },
         { "Samama Festival!\n(katagiri bootleg)", "Mrs. GREEN APPLE", "_Play_" },
-        { "Stereo Sayan 3D\n(Cut ver.)", "fartwad", "Piger" }
+        { "Stereo Sayan 3D\n(Cut ver.)", "fartwad", "Piger" },
+        { "Flow", "Creo", "TGTM + Piger" },
+        { "Honestly", "THØRNS", "thatguytheman" },
+        { "Naruto", "snickerman7", "Panzerfaust" },
+        { "The mario", "The mario", "The mario" },
+        { "March of the Profane", "Danny Baranowsky", "Gotchfutchian" },
+        { "Point and Click", "MEMODEMO x AQUASINE", "Cytruss & Piger" },
+        { "Rabbit Hole", "DECO*27", "Bekko" },
+        { "Vampire", "Deco*27", "thefinals" },
+        { "World's End Valentine", "OMORI OST", "Sparking Circuits" },
+        { "Leather Teeth (Beat\nJuggle)", "Carpenter Brut", "DawnAndNight" },
+        { "Otis", "chipzel", "Charter" },
+        { "GUARDIAN", "Toby Fox", "pois" },
+        { "Death By AI: Lone\nSurvivor - Main Theme", "flowerhead", "Lux" },
+        { "wish i could care less", "fizzd (ft. Yeo)", "DragonIvanRussia" },
+        { "Ievan Polkka", "Eino Kettunen (C. Hatsune Miku)", "" },
+        { "Charlie's Absolution", "Flecha Da Foxy", "Random22" },
+        { "Daydream", "Cloudier", "PGO6973" },
+        { "Im From Another\nDimension", "Brad Breeck", "Piger" },
+        { "Flamewall", "Camellia", "bliss" },
+        { "BANANA BUS\nBREAKDOWN", "fearless.", "skit.png" },
+        { "DRAGONLADY", "Nankumo", "_Play_" },
+        { "Limbus Company X Arknights\nCollab - Intervallo VI-EX Boss\nTheme 2", "Studio EIM", "Flareiozum" },
+        { "Finixe (Cut Ver.)", "Silentroom", "lalafk" },
+        { "In Love", "YOU LOVE HER", "Zorhan" },
+        { "Artificial Chariot", "Riya", "Slipty" },
+        { "White Surf Style 6", "Pedro Silva", "Whenpigfly666" },
+        { "Precipice (Tanger\nRemix)", "Tanger", "Krmailence (CCC)" },
+        { "Rockefeller Street\n(Nightcore Cut Ver.)", "Getter Jaani", "zeli" },
+        { "Winter (The Wind Can\nBe Still)", "ConcernedApe", "DopeGamer" },
+        { "(CCC) Creative Freedom\nEMEIFIED", "Emei", "FortT2" },
+        { "THE FINAL STRATEGY", "rundownSD", "PhilG / Zeni" },
+        { "Terminally Online", "Glitch Cat X wh1teskyy", "CoolModder" },
+        { "FAILURE_CRITICAL", "Azali", "JLM" },
+        { "P`rismatic fut`URE", "豊穣ミノリ", "azabi" },
+        { "Toaster with Teeth", "Kasey Ozymy", "Gavi Guy" },
+        { "Commatose", "Glass beach", "Unity" },
+        { "The Devourer Of Gods", "DM DOKURO", "Hosted By Kakadu" },
+        { "Tetoris", "Hiiragi Magnetite", "Worn + Asphalt09" },
+        { "BACKSTREET BOUNCE", "KEY AFTER KEY", "DerpyTheNub" },
+        { "Spoken For", "FLAVOR FOLEY", "olivia" },
+        { "A Fool Moon Night", "Koxx", "zeli, Bliss, Piger, PhilG / Zeni" },
+        { "The Cat Evolved Into\nThe Microwave-proof\nCat!", "かめりあ", "himych" },
+        { "Salmiakki", "Frums", "Kirbo" },
+        { "Dark Fountain", "Toby Fox I guess ?", "Whenpigfly666" },
+        { "Steve's Lava Chicken\n(Camellia Remix)", "Camellia", "Slipty" },
+        { "the night before\nBEATBLOCK", "jupitercl0uds", "jupitercl0uds" },
+        { "Thick of It", "IShowSpeed, KSI", "CharterIGuess1" },
+        { "A World on Fire", "Bo Burnham", "DPS2004" },
+        { "Beyond", "philmakesnoise", "Kirbo" },
     };
 
     [SerializeField] KMSelectable Overlay;
@@ -122,7 +177,7 @@ public class beatblock : MonoBehaviour
     [SerializeField] KMSelectable BG;
     [SerializeField] SpriteRenderer BGRenderer;
     [SerializeField] Sprite[] BGSprites;
-    [SerializeField] TextMesh[] ChartInfo; // Song Name, Author, Charter
+    [SerializeField] TextMesh[] ChartInfo; // Song Name, Artist, Charter
     [SerializeField] AudioClip HLClip;
     [SerializeField] AudioClip StrikeClip;
     [SerializeField] AudioClip SolveClip;
@@ -132,7 +187,7 @@ public class beatblock : MonoBehaviour
     int genChart;
     List<int> selectionCharts = new List<int>();
     int selectedChart = 0;
-    bool highlight;
+    bool highlightBG, highlightPlay;
 
     static int ModuleIdCounter = 1;
     int ModuleId;
@@ -141,26 +196,30 @@ public class beatblock : MonoBehaviour
     void Awake()
     {
         ModuleId = ModuleIdCounter++;
-        Overlay.OnHighlight += delegate () { OverlayHighlight(); };
-        Overlay.OnHighlightEnded += delegate () { OverlayUnhighlight(); };
-        BG.OnInteract += delegate () { CycleBG(); return false; };
         Overlay.OnInteract += delegate () { Submit(); return false; };
+        Overlay.OnHighlight += delegate () { OverlayRenderer.sprite = OverlaySprites[1]; HighlightPlay(); };
+        Overlay.OnHighlightEnded += delegate () { OverlayRenderer.sprite = OverlaySprites[0]; highlightPlay = false; };
+        BG.OnInteract += delegate () { CycleBG(); return false; };
+        BG.OnHighlight += delegate () { HighlightBG(); };
+        BG.OnHighlightEnded += delegate () { highlightBG = false; };
     }
 
-    void OverlayHighlight()
+    void HighlightPlay()
     {
-        OverlayRenderer.sprite = OverlaySprites[1];
-        if (!highlight)
+        if (!highlightPlay)
         {
             Audio.PlaySoundAtTransform(HLClip.name, Overlay.transform);
-            highlight = true;
+            highlightPlay = true;
         }
     }
 
-    void OverlayUnhighlight()
+    void HighlightBG()
     {
-        OverlayRenderer.sprite = OverlaySprites[0];
-        highlight = false;
+        if (!highlightBG)
+        {
+            Audio.PlaySoundAtTransform(HLClip.name, Overlay.transform);
+            highlightBG = true;
+        }
     }
 
     void CycleBG()
@@ -202,7 +261,7 @@ public class beatblock : MonoBehaviour
     {
         genChart = Rnd.Range(0, Charts.Length / 3);
         for (int i = 0; i < 3; i++) ChartInfo[i].text = Charts[genChart, i];
-        ChartInfo[0].fontSize = genChart == 92 ? 65 : 80; // icantbelieveiletyougetaway edge case
+        ChartInfo[0].fontSize = (genChart == 92 || genChart == 127) ? 65 : 80; // icantbelieveiletyougetaway + ...Intervallo VI-EX Boss Theme 2 edge cases (the first is one technically word, so I cannot put a line break anywhere into it, and the other is way too long to fit with the normal font size)
         ChartInfo[1].transform.localPosition = new Vector3(-0.0405f, 0.0151f, -0.0392f + -0.0131f * Charts[genChart, 0].Count(x => x == '\n'));
 
         selectionCharts = new List<int>();
@@ -266,6 +325,7 @@ public class beatblock : MonoBehaviour
                         BG.OnInteract();
                         yield return new WaitForSeconds(0.1f);
                     }
+                    yield return new WaitForSeconds(0.5f);
                     break;
                 case "PLAY":
                 case "SUBMIT":
@@ -279,6 +339,7 @@ public class beatblock : MonoBehaviour
                         yield return null;
                         Overlay.OnInteract();
                     }
+                    yield return new WaitForSeconds(0.5f);
                     break;
                 default:
                     yield return "sendtochatmessage Invalid command!";
