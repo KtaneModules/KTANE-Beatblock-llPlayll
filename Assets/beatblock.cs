@@ -172,7 +172,7 @@ public class beatblock : MonoBehaviour
         { "Beyond", "philmakesnoise", "Kirbo" },
     };
     string[] NoteNames = { "Block", "Hold", "Side", "Mine", "Minehold", "Bounce" };
-    string[] PaddleModeNames = { "Regular", "No Paddle", "360° Paddle" };
+    string[] PaddleModeNames = { "Regular", "None", "360°" };
 
     [SerializeField] KMSelectable Overlay;
     [SerializeField] SpriteRenderer OverlayRenderer;
@@ -182,7 +182,7 @@ public class beatblock : MonoBehaviour
     [SerializeField] Sprite[] BGSprites;
     [SerializeField] TextMesh[] ChartInfo; // Song Name, Artist, Charter
     [SerializeField] Slider BeatSlider;
-    [SerializeField] TextMesh BeatText;
+    [SerializeField] Text BeatText;
     [SerializeField] KMSelectable[] KeypadButtons; // 0123456789.<
     [SerializeField] KMSelectable ShowResults;
     [SerializeField] TextMesh AccuracyText;
@@ -190,7 +190,7 @@ public class beatblock : MonoBehaviour
     [SerializeField] TextMesh[] NoteDurations;
     [SerializeField] Sprite[] NoteSprites; // Block, Hold, Side, Mine, Minehold, Bounce
     [SerializeField] SpriteRenderer PaddleRenderer;
-    [SerializeField] Sprite[] PaddleModeSprites; // Regular (None), No Paddle, 360° Paddle
+    [SerializeField] Sprite[] PaddleModeSprites; // Regular (No Icon), None, 360°
     [SerializeField] GameObject Stage1;
     [SerializeField] GameObject Stage2;
     [SerializeField] AudioClip HLClip;
@@ -198,8 +198,8 @@ public class beatblock : MonoBehaviour
     [SerializeField] AudioClip CorrectClip;
 
     int GenChartCount = 8;
-    int MinEndBeat = 10;
-    int MaxEndBeat = 8;
+    int MinEndBeat = 16;
+    int MaxEndBeat = 18;
     List<int> WeightedNoteCounts = new List<int> { 1, 1, 1, 2, 2, 2, 2, 2, 3, 3 };
     List<int> WeightedNoteTypes = new List<int> { 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 4, 5, 5 };
     List<int> WeightedPaddleModes = new List<int> { 0, 0, 0, 0, 0, 1, 1, 2, 2 };
@@ -216,6 +216,10 @@ public class beatblock : MonoBehaviour
     string answerAccuracy;
     int sliderBeat;
     string accuracyInput = "";
+
+    bool inStage2;
+
+    float TPCycleSpeed = 2;
 
     static int ModuleIdCounter = 1;
     int ModuleId;
@@ -275,6 +279,7 @@ public class beatblock : MonoBehaviour
             Stage1.SetActive(false);
             Stage2.SetActive(true);
             GenerateS2();
+            inStage2 = true;
         }
         else
         {
@@ -349,6 +354,7 @@ public class beatblock : MonoBehaviour
             Audio.PlaySoundAtTransform(StrikeClip.name, BG.transform);
             GetComponent<KMBombModule>().HandleStrike();
             accuracyInput = "";
+            AccuracyText.text = "";
         }
     }
 
@@ -360,17 +366,19 @@ public class beatblock : MonoBehaviour
 
     void GenerateS1()
     {
-        genChart = Rnd.Range(0, Charts.Length / 3);
+        int totalCharts = Charts.Length / 3;
+
+        genChart = Rnd.Range(0, totalCharts);
         for (int i = 0; i < 3; i++) ChartInfo[i].text = Charts[genChart, i];
-        ChartInfo[0].fontSize = (genChart == 92 || genChart == 127) ? 65 : 80; // icantbelieveiletyougetaway + ...Intervallo VI-EX Boss Theme 2 edge cases (the first is one technically word, so I cannot put a line break anywhere into it, and the other is way too long to fit with the normal font size)
+        ChartInfo[0].fontSize = (genChart == 98 || genChart == 127) ? 65 : 80; // icantbelieveiletyougetaway + ...Intervallo VI-EX Boss Theme 2 edge cases (the first is one technically word, so I cannot put a line break anywhere into it, and the other is way too long to fit with the normal font size)
         ChartInfo[1].transform.localPosition = new Vector3(-0.0405f, 0.0151f, -0.0392f + -0.0131f * Charts[genChart, 0].Count(x => x == '\n'));
 
         selectionCharts = new List<int>();
         selectionCharts.Add(genChart);
         for (int i = 0; i < GenChartCount - 1; i++)
         {
-            int addChart = Rnd.Range(0, Charts.Length / 3);
-            while (selectionCharts.Contains(addChart)) addChart = Rnd.Range(0, Charts.Length / 3);
+            int addChart = Rnd.Range(0, totalCharts);
+            while (selectionCharts.Contains(addChart)) addChart = Rnd.Range(0, totalCharts);
             selectionCharts.Add(addChart);
         }
         selectionCharts = selectionCharts.Shuffle();
@@ -399,7 +407,7 @@ public class beatblock : MonoBehaviour
                     while (noteType == 1 || noteType == 4 || noteType == 5) noteType = WeightedNoteTypes.PickRandom();
                 }
                 int duration = -1;
-                if (noteType == 1 || noteType == 4 || noteType == 5) duration = Rnd.Range(1, Math.Min(5, beats - i - 1));
+                if (noteType == 1 || noteType == 4 || noteType == 5) duration = Rnd.Range(1, Math.Min(6, beats - i));
                 beat[j] = NoteNames[noteType] + (duration > 0 ? $" {duration}" : "");
                 logBeat.Add(duration > 0 ? $"{NoteNames[noteType]} (duration = {duration})" : NoteNames[noteType]);
             }
@@ -408,7 +416,7 @@ public class beatblock : MonoBehaviour
             int paddle = WeightedPaddleModes.PickRandom();
             paddleModes.Add(paddle);
 
-            Log($"Beat {i}.000: {logBeat.Join(", ")}. Paddle Mode - {PaddleModeNames[paddle]}.");
+            Log($"Beat {i}.000: {logBeat.Join(", ")}; Paddle - {PaddleModeNames[paddle]}.");
         }
         CalculateS2();
         SliderValChange();
@@ -499,7 +507,8 @@ public class beatblock : MonoBehaviour
     }
 
 #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"Use <!{0} cycle (#)> to cycle the background once (or, optionally, # times). Use <!{0} play> or <!{0} submit> to press the Play button.";
+    private readonly string TwitchHelpMessage = @"For Stage 1: Use <!{0} cycle (#)> to cycle the background once (or, optionally, # times). Use <!{0} play> or <!{0} submit> to press the Play button. " + 
+                                                 "For Stage 2: Use <!{0} cycle> to cycle through all of the chart's beats. Use <!{0} cyclespeed #> to set the cycle speed to one beat per # seconds (default = 2 seconds). Use <!{0} beat #> to cycle to beat #.000. Use <!{0} submit #> to submit the accuracy #.";
 #pragma warning restore 414
 
     IEnumerator ProcessTwitchCommand(string Command)
@@ -511,47 +520,200 @@ public class beatblock : MonoBehaviour
             switch (commandArgs[0])
             {
                 case "CYCLE":
-                    int cycleCount = 1;
-                    if (commandArgs.Length == 2)
+                    if (!inStage2)
                     {
-                        if (int.TryParse(commandArgs[1], out cycleCount))
+                        int cycleCount = 1;
+                        if (commandArgs.Length == 2)
                         {
-                            if (cycleCount < 1)
+                            if (int.TryParse(commandArgs[1], out cycleCount))
                             {
-                                yield return "sendtochatmessage Invalid cycle count!";
+                                if (cycleCount < 1)
+                                {
+                                    yield return "sendtochaterror Invalid cycle count!";
+                                    yield break;
+                                }
+                            }
+                            else
+                            {
+                                yield return "sendtochaterror Invalid cycle count!";
                                 yield break;
                             }
                         }
-                        else
+                        yield return null;
+                        for (int i = 0; i < cycleCount; i++)
                         {
-                            yield return "sendtochatmessage Invalid cycle count!";
+                            BG.OnInteract();
+                            yield return new WaitForSeconds(0.1f);
+                        }
+                        yield return new WaitForSeconds(0.5f);
+                    }
+                    else
+                    {
+                        if (commandArgs.Length != 1)
+                        {
+                            yield return "sendtochaterror Invalid command!";
                             yield break;
                         }
+                        else
+                        {
+                            yield return null;
+                            BeatSlider.value = 0;
+                            while (BeatSlider.value < beats - 1)
+                            {
+                                SliderValChange();
+                                yield return new WaitForSeconds(TPCycleSpeed);
+                                BeatSlider.value++;
+                            }
+                            yield return new WaitForSeconds(0.5f);
+                        }
                     }
-                    yield return null;
-                    for (int i = 0; i < cycleCount; i++)
-                    {
-                        BG.OnInteract();
-                        yield return new WaitForSeconds(0.1f);
-                    }
-                    yield return new WaitForSeconds(0.5f);
                     break;
                 case "PLAY":
-                case "SUBMIT":
-                    if (commandArgs.Length != 1)
+                    if (inStage2)
                     {
-                        yield return "sendtochatmessage Invalid command!";
+                        yield return "sendtochaterror Command unavailable in Stage 2!";
                         yield break;
                     }
                     else
                     {
-                        yield return null;
-                        Overlay.OnInteract();
+                        if (commandArgs.Length != 1)
+                        {
+                            yield return "sendtochaterror Invalid command!";
+                            yield break;
+                        }
+                        else
+                        {
+                            yield return null;
+                            Overlay.OnInteract();
+                            yield return new WaitForSeconds(0.5f);
+                        }
                     }
-                    yield return new WaitForSeconds(0.5f);
+                    break;
+                case "CYCLESPEED":
+                    if (!inStage2)
+                    {
+                        yield return "sendtochaterror Command unavailable in Stage 1!";
+                        yield break;
+                    }
+                    else
+                    {
+                        if (commandArgs.Length != 2)
+                        {
+                            yield return "sendtochaterror Invalid command!";
+                            yield break;
+                        }
+                        else
+                        {
+                            float newCycleSpeed;
+                            if (float.TryParse(commandArgs[1], out newCycleSpeed))
+                            {
+                                if (newCycleSpeed <= 0)
+                                {
+                                    yield return "sendtochaterror Invalid cycle speed!";
+                                    yield break;
+                                }
+                                else if (newCycleSpeed >= 15)
+                                {
+                                    yield return "sendtochaterror Cycle speed too long!";
+                                    yield break;
+                                }
+                                else
+                                {
+                                    TPCycleSpeed = newCycleSpeed;
+                                    yield return $"sendtochat Setting the cycle speed to {TPCycleSpeed} seconds per beat.";
+                                }
+                            }
+                            else
+                            {
+                                yield return "sendtochaterror Invalid cycle speed!";
+                                yield break;
+                            }
+                        }
+                    }
+                    break;
+                case "BEAT":
+                    if (!inStage2)
+                    {
+                        yield return "sendtochaterror Command unavailable in Stage 1!";
+                        yield break;
+                    }
+                    else
+                    {
+                        if (commandArgs.Length != 2)
+                        {
+                            yield return "sendtochaterror Invalid command!";
+                            yield break;
+                        }
+                        else
+                        {
+                            int cycleBeat;
+                            if (int.TryParse(commandArgs[1], out cycleBeat))
+                            {
+                                if (cycleBeat < 0 || cycleBeat >= beats)
+                                {
+                                    yield return "sendtochaterror Invalid beat!";
+                                    yield break;
+                                }
+                                else
+                                {
+                                    yield return null;
+                                    BeatSlider.value = cycleBeat;
+                                    SliderValChange();
+                                    yield return new WaitForSeconds(0.5f);
+                                }
+                            }
+                            else
+                            {
+                                yield return "sendtochaterror Invalid beat!";
+                                yield break;
+                            }
+                        }
+                    }
+                    break;
+                case "SUBMIT":
+                    if (!inStage2)
+                    {
+                        if (commandArgs.Length != 1)
+                        {
+                            yield return "sendtochaterror Invalid command!";
+                            yield break;
+                        }
+                        else
+                        {
+                            yield return null;
+                            Overlay.OnInteract();
+                            yield return new WaitForSeconds(0.5f);
+                        }
+                    }
+                    else
+                    {
+                        if (commandArgs.Length != 2)
+                        {
+                            yield return "sendtochaterror Invalid command!";
+                            yield break;
+                        }
+                        else
+                        {
+                            if (Regex.IsMatch(commandArgs[1], @"[^0-9\.<]"))
+                            {
+                                yield return "sendtochaterror Invalid submission!";
+                                yield break;
+                            }
+                            else
+                            {
+                                yield return null;
+                                foreach (char c in commandArgs[1])
+                                {
+                                    KeypadButtons["0123456789.<".IndexOf(c)].OnInteract();
+                                    yield return new WaitForSeconds(0.05f);
+                                }
+                                ShowResults.OnInteract();
+                            }
+                        }
+                    }
                     break;
                 default:
-                    yield return "sendtochatmessage Invalid command!";
+                    yield return "sendtochaterror Invalid command!";
                     yield break;
             }
         }
@@ -560,11 +722,20 @@ public class beatblock : MonoBehaviour
     IEnumerator TwitchHandleForcedSolve()
     {
         yield return null;
-        while (selectionCharts[selectedChart] != genChart)
+        if (!inStage2)
         {
-            BG.OnInteract();
-            yield return new WaitForSeconds(0.1f);
+            while (selectionCharts[selectedChart] != genChart)
+            {
+                BG.OnInteract();
+                yield return new WaitForSeconds(0.1f);
+            }
+            Overlay.OnInteract();
         }
-        Overlay.OnInteract();
+        foreach (char c in answerAccuracy)
+        {
+            KeypadButtons["0123456789.<".IndexOf(c)].OnInteract();
+            yield return new WaitForSeconds(0.05f);
+        }
+        ShowResults.OnInteract();
     }
 }

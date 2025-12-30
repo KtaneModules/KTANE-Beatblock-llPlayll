@@ -14,7 +14,9 @@ MonoBehaviour:
   id: beatblock
   title: Beatblock
   author: _Play_
-  description: 
+  description: "So you want to block beats? It\u2019s going to take an awful lot of
+    practice.\n\nDeveloped by _Play_.\nMade after the game Beatblock (developed by
+    BubbleTabby), make sure to check it out! <3"
   version: 1
   outputFolder: build
-  previewImage: {fileID: 0}
+  previewImage: {fileID: 2800000, guid: af44e6420fa16b94b8b7ed41a660e33c, type: 3}
