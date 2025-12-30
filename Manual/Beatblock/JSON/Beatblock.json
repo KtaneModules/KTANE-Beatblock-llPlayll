@@ -1,0 +1,15 @@
+{
+  "Author": "_Play_",
+  "DefuserDifficulty": "Easy",
+  "Description": " Tags: preview-image, song-cover, text, play-button",
+  "ExpertDifficulty": "Medium",
+  "ModuleID": "beatblock",
+  "Name": "Beatblock",
+  "Origin": "Mods",
+  "Published": "2025-12-31",
+  "SortKey": "BEATBLOCK",
+  "SourceUrl": "https://github.com/llPlayll/KTANE-Beatblock",
+  "SteamID": "3635379606",
+  "Symbol": "Beat",
+  "Type": "Regular"
+}
